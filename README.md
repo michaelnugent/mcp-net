@@ -59,37 +59,91 @@ The server expects a directory containing MCP executables. Each executable must 
 2. Run each executable to discover the tools it provides
 3. Make these tools available to clients with namespaced names (`mcpname.toolname`)
 
+## Building and Running with Make
+
+This project includes a Makefile that simplifies building and running the components.
+
+### Building
+
+Build all components (proxy, server, and examples):
+```bash
+make
+```
+
+Or build specific components:
+```bash
+make build-proxy    # Build only the proxy
+make build-server   # Build only the server
+make build-examples # Build only the example MCPs
+```
+
+### Running
+
+Start the MCP server in HTTP mode (after building examples and copying them to the mcps directory):
+```bash
+make run-server
+```
+
+Start the MCP server in stdio mode:
+```bash
+make run-server-stdio
+```
+
+Run the proxy to connect to the local MCP server:
+```bash
+make run-proxy
+```
+
+### Testing
+
+Test the proxy with a basic tools/list request (requires server running):
+```bash
+make test-proxy
+```
+
+Test specific example tools through the proxy (requires server running):
+```bash
+make test-hello   # Test the hello tool
+make test-add     # Test the calculator's add tool
+```
+
 ### Example MCPs
 
-The `examples` directory contains sample MCPs that can be used for testing:
+The repository includes example MCPs that demonstrate how to implement MCP-compatible tools:
 
 - `hello-mcp`: A simple MCP that provides a "hello" tool
 - `calculator-mcp`: An MCP that provides math operations
 
-To build the examples:
-
+Build and install the examples to the mcps directory:
 ```bash
-cd examples/hello-mcp
-go build -o hello-mcp
-cd ../calculator-mcp
-go build -o calculator-mcp
+make examples
 ```
 
-Then copy the built executables to your MCP directory:
+### Development Tasks
 
+Format Go code:
 ```bash
-mkdir -p mcps
-cp examples/hello-mcp/hello-mcp mcps/
-cp examples/calculator-mcp/calculator-mcp mcps/
+make fmt
 ```
 
-## Building
-
-To build the proxy and server:
-
+Run Go vet for code analysis:
 ```bash
-go build -o mcp-proxy ./cmd/mcp-proxy
-go build -o mcp-server ./cmd/mcp-server
+make vet
+```
+
+Update and tidy Go dependencies:
+```bash
+make tidy
+```
+
+Clean build artifacts:
+```bash
+make clean
+```
+
+Install binaries to GOPATH/bin:
+```bash
+make install
 ```
 
 ## License
