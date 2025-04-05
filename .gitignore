@@ -1,31 +1,41 @@
-# Binaries for programs and plugins
+# Build directory and all its contents
+/build/
+
+# MCPs directory (contains executable MCPs)
+/mcps/
+
+# Binary files
+/mcp-proxy
+/mcp-server
+/examples/hello-mcp/hello-mcp
+/examples/calculator-mcp/calculator-mcp
+
+# Go specific ignores
 *.exe
 *.exe~
 *.dll
 *.so
 *.dylib
-mcp-proxy
-
-# Log files
-*.log
-
-# Test binary, built with `go test -c`
 *.test
-
-# Output of the go coverage tool, specifically when used with LiteIDE
 *.out
-
-# Dependency directories (remove the comment below to include it)
-# vendor/
-
-# Go workspace file
 go.work
 
-# IDE directories
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Editor and IDE files
 .idea/
 .vscode/
 *.swp
 *.swo
+*~
+
+# Log files
+*.log
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
 
 # OS specific files
 .DS_Store

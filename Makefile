@@ -88,6 +88,11 @@ test-add: build-proxy
 clean:
 	@echo "Cleaning..."
 	@rm -rf $(BUILD_DIR)
+	@rm -f mcps/$(HELLO_MCP) mcps/$(CALCULATOR_MCP)
+	@rm -f $(EXAMPLES_DIR)/$(HELLO_MCP)/$(HELLO_MCP)
+	@rm -f $(EXAMPLES_DIR)/$(CALCULATOR_MCP)/$(CALCULATOR_MCP)
+	@rm -f $(MCP_PROXY) $(MCP_SERVER)
+	@echo "Clean complete"
 
 # Format code
 fmt:
