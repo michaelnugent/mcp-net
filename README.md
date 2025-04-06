@@ -10,6 +10,12 @@ A proxy for the Model Context Protocol that forwards requests to an HTTP endpoin
 
 The MCP proxy forwards data from stdin to a specified HTTP endpoint and returns responses to stdout. It implements a simple proxy that can be used to communicate with remote MCP-compatible servers.
 
+### Why golang?
+
+This code runs on the client side.  Many languages require a runtime and correct set of libraries installed to do this.  Go compiles
+to a single executable file.  This cuts down on deployment difficulties, user support requests, breaking updates to the runtime
+or other issues that are usually taken care of by providing an http endpoint instead of deployment.
+
 ### Usage
 
 ```bash
