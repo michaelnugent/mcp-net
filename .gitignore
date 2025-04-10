@@ -1,6 +1,6 @@
 # Build directory and all its contents
 /build/
-
+bin
 # MCPs directory (contains executable MCPs)
 /mcps/
 

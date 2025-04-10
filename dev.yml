@@ -1,0 +1,61 @@
+name: mcp-net
+
+type: go
+
+up:
+  - go:
+      version: 1.24.2
+      modules: true
+  - packages:
+      - golangci-lint
+
+# Commands for building, running, and testing MCP tools
+commands:
+  build:
+    desc: Build all binaries (proxy, server).
+    run: |
+      mkdir -p bin
+      go build -o bin/mcp-proxy ./cmd/mcp-proxy
+      go build -o bin/mcp-server ./cmd/mcp-server    
+  build-examples:
+    desc: Build and install example MCPs to mcps directory
+    run: |
+      mkdir -p bin/examples/hello-mcp
+      mkdir -p bin/examples/calculator-mcp
+      go build -o bin/examples/hello-mcp/hello-mcp ./examples/hello-mcp
+      go build -o bin/examples/calculator-mcp/calculator-mcp ./examples/calculator-mcp
+      mkdir -p mcps
+      cp bin/examples/hello-mcp/hello-mcp mcps/
+      cp bin/examples/calculator-mcp/calculator-mcp mcps/
+      chmod +x mcps/*
+  run-server:
+    desc: Start the MCP server in HTTP mode
+    run: ./bin/mcp-server -http=:8080 -mcp-dir=mcps
+  run-server-stdio:
+    desc: Start the MCP server in stdio mode
+    run: ./bin/mcp-server -stdio -mcp-dir=mcps
+  run-proxy:
+    desc: Run the proxy to connect to the local MCP server
+    run: ./bin/mcp-proxy -endpoint=http://localhost:8080
+  
+  # Tests the proxy and MCPs functionality
+  # Requires both server and example MCPs to be running
+  # Runs three tests:
+  # 1. Basic tools/list request
+  # 2. Hello world example
+  # 3. Calculator add example
+  test-proxy:
+    desc: Run all proxy tests (requires server running)
+    run: |
+      echo "Testing MCP proxy with sample request..."
+      echo '{"jsonrpc":"2.0","id":1,"method":"tools/list"}' | ./bin/mcp-proxy -endpoint=http://localhost:8080
+      
+      echo "Testing hello tool via proxy..."
+      echo '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"hello-mcp.hello","arguments":{"name":"World"}}}' | ./bin/mcp-proxy -endpoint=http://localhost:8080
+      
+      echo "Testing calculator add tool via proxy..."
+      echo '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"calculator-mcp.add","arguments":{"x":10,"y":20}}}' | ./bin/mcp-proxy -endpoint=http://localhost:8080
+  test:
+    run: go test -v -race -cover ./...
+  style:
+    run: golangci-lint run --fix ./...
